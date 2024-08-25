@@ -1,0 +1,79 @@
+C51 COMPILER V9.00   MAIN                                                                  08/25/2024 22:59:33 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: D:\Program Files\Keil_C51_v9.00\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <reg51.h>
+   2          #include "tones.h"
+   3          #include "music.h"
+   4          
+   5          sbit button = P3^0;
+   6          unsigned int cnt = 0;
+   7          extern unsigned int en;
+   8          
+   9          void start_music();
+  10          
+  11          void main(void){
+  12   1              bit prevState = 1;
+  13   1              EA = 1;
+  14   1              EX0 = 1;
+  15   1              IT0 = 1;
+  16   1              while (1){
+  17   2                      start_music();
+  18   2      //              if (button == 0)
+  19   2      //                      if (prevState == 1){
+  20   2      //                              unsigned int size = sizeof(AnotherDayOfSun) / sizeof(AnotherDayOfSun[0]);
+  21   2      //                              playList(AnotherDayOfSun, size);
+  22   2      //                      }
+  23   2      //              prevState == button;
+  24   2                      ;
+  25   2              }
+  26   1      //      while(1){
+  27   1      //              unsigned int size = sizeof(theDisappearenceOfHatsuneMiku) / sizeof(theDisappearenceOfHatsuneMiku[0]);
+  28   1      //              playList(theDisappearenceOfHatsuneMiku, size);
+  29   1      //      }
+  30   1      
+  31   1      //      while(1){
+  32   1      //              echo(440, 2000);
+  33   1      //      }
+  34   1      }
+  35          
+  36          void start_music()
+  37          {
+  38   1              while(en){
+  39   2                      unsigned int size = sizeof(AnotherDayOfSun) / sizeof(AnotherDayOfSun[0]);
+  40   2                      playList(AnotherDayOfSun, size);
+  41   2              }
+  42   1      }
+  43          
+  44          void int0(void) interrupt 0 using 0{
+  45   1              cnt++;
+  46   1              if (cnt & 0x01){
+  47   2                      en = 1;
+  48   2                      //start_music();
+  49   2              }
+  50   1              else{
+  51   2                      sound = 0;
+  52   2                      en = 0;
+  53   2              }
+  54   1      }
+
+C51 COMPILER V9.00   MAIN                                                                  08/25/2024 22:59:33 PAGE 2   
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     73    ----
+   CONSTANT SIZE    =    381    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

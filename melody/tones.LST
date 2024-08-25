@@ -1,0 +1,87 @@
+C51 COMPILER V9.00   TONES                                                                 08/25/2024 22:59:34 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE TONES
+OBJECT MODULE PLACED IN tones.OBJ
+COMPILER INVOKED BY: D:\Program Files\Keil_C51_v9.00\C51\BIN\C51.EXE tones.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include "tones.h"
+   2          unsigned int en = 0;
+   3          const unsigned int frequency[] = {
+   4                  33, 37, 41, 44, 49, 55, 62,
+   5                  65, 73, 82, 87, 98, 110, 123,
+   6                  131, 147, 165, 175, 196, 220, 247, 
+   7                  262, 294, 330, 349, 392, 440, 494,
+   8                  523, 587, 659, 698, 784, 880, 988,
+   9                  1047, 1175, 1319, 1397, 1568, 1760, 1976 
+  10          }; 
+  11          
+  12          void echo(unsigned int hz, unsigned int t)
+  13          {
+  14   1              unsigned char HHH,LLL;
+  15   1              unsigned int delay_times;
+  16   1              unsigned long loop_times;
+  17   1      
+  18   1              TMOD = 0x01;
+  19   1              if(hz){
+  20   2                      delay_times = 460829 / hz;
+  21   2                      loop_times = (long)t * hz / 500;
+  22   2              }
+  23   1              else{
+  24   2                      delay_times = 922;
+  25   2                      loop_times = (long)t;
+  26   2              }
+  27   1      
+  28   1              HHH = (65536-delay_times) / 256;
+  29   1              LLL = (65536-delay_times) % 256;
+  30   1      
+  31   1              TH0 = HHH;
+  32   1              TL0 = LLL;
+  33   1              TR0 = 1;
+  34   1              sound = 0;
+  35   1      
+  36   1      
+  37   1              while(loop_times--)
+  38   1              {
+  39   2                      while(TF0==0);
+  40   2                      TF0 = 0;
+  41   2                      if(hz)  sound = ~sound;
+  42   2                      TH0 = HHH;
+  43   2                      TL0 = LLL;
+  44   2              }
+  45   1      }
+  46          
+  47          void echo_note(unsigned char note, unsigned int t)
+  48          {
+  49   1              if(note == -1)
+  50   1                      echo(0, t);
+  51   1              else echo(frequency[note], t);
+  52   1      }
+  53          
+  54          void playList(Notes myNotes[], unsigned int size)
+  55          {
+C51 COMPILER V9.00   TONES                                                                 08/25/2024 22:59:34 PAGE 2   
+
+  56   1          unsigned int i;
+  57   1          for(i=0;i<size;i++)
+  58   1          {
+  59   2                      if(!en) break;
+  60   2              echo_note(myNotes[i].tone, myNotes[i].duration);
+  61   2          }
+  62   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    343    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     86      21
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
